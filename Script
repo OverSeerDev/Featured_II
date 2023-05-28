@@ -1,0 +1,71 @@
+local plr = game:GetService("Players").LocalPlayer
+local plrName = game:GetService("Players").LocalPlayer.Name
+
+local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
+local Window = OrionLib:MakeWindow({
+    Name = "Auto Accepter | Free Script",
+    HidePremium = false,
+    SaveConfig = true,
+    ConfigFolder = "Auto Accepter Farming",
+    IntroEnabled = true,
+    IntroText = "Opening Interface",
+    CloseCallback = function()
+        print("Interface Closed")
+    end
+})
+OrionLib:MakeNotification({
+    Name = "Welcome Back",
+    Content = "Thank You For Executing This Interface "..game.Players.LocalPlayer.Name.."!",
+    Image = "rbxassetid://4483345998",
+    Time = 5
+})
+local Tab = Window:MakeTab({
+    Name = "Auto Accepter",
+    Icon = "rbxassetid://4483345998",
+    PremiumOnly = false
+})
+local Section = Tab:AddSection({
+    Name = "Auto Accept Trades"
+})
+
+Tab:AddLabel("Auto Accepter + Trade Readier")
+
+Tab:AddToggle({
+	Name = "Trade Ready",
+	Default = false,
+	Callback = function(TradeReadier)
+		if TradeReadier == true then 
+			_G.ReadyTrades = true
+			wait(0.01)
+			local args = { 
+				[1] = "TradeReady"
+			}
+			game:GetService("ReplicatedStorage"):WaitForChild("NetworkRemoteEvent"):FireServer(unpack(args))
+			if TradeReadier == false then
+				_G.ReadyTrades = false
+			end
+		else
+			_G.ReadyTrades = false
+		end
+	end
+})
+
+Tab:AddToggle({
+	Name = "Trade Accept",
+	Default = false,
+	Callback = function(TradeAccepter)
+		if TradeAccepter == true then 
+			_G.AcceptTrades = true
+			wait(0.01)
+			local args = { 
+				[1] = "TradeConfirm"
+			}
+			game:GetService("ReplicatedStorage"):WaitForChild("NetworkRemoteEvent"):FireServer(unpack(args))
+			if TradeAccepter == false then
+				_G.AcceptTrades = false
+			end
+		else
+			_G.AcceptTrades = false
+		end
+	end
+})
